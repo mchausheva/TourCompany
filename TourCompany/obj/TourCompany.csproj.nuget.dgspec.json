@@ -4,14 +4,167 @@
     "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\TourCompany.csproj": {}
   },
   "projects": {
-    "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\TourCompany.csproj": {
+    "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\TourCompany.BL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\TourCompany.csproj",
-        "projectName": "TourCompany",
-        "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\TourCompany.csproj",
+        "projectUniqueName": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\TourCompany.BL.csproj",
+        "projectName": "TourCompany.BL",
+        "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\TourCompany.BL.csproj",
         "packagesPath": "C:\\Users\\m.chausheva\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\obj\\",
+        "outputPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\m.chausheva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.DL\\TourCompany.DL.csproj": {
+                "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.DL\\TourCompany.DL.csproj"
+              },
+              "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\TourCompany.Models.csproj": {
+                "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\TourCompany.Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.DL\\TourCompany.DL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.DL\\TourCompany.DL.csproj",
+        "projectName": "TourCompany.DL",
+        "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.DL\\TourCompany.DL.csproj",
+        "packagesPath": "C:\\Users\\m.chausheva\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.DL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\m.chausheva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\TourCompany.Models.csproj": {
+                "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\TourCompany.Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\TourCompany.Models.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\TourCompany.Models.csproj",
+        "projectName": "TourCompany.Models",
+        "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\TourCompany.Models.csproj",
+        "packagesPath": "C:\\Users\\m.chausheva\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\m.chausheva\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,9 +193,114 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\TourCompany.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\TourCompany.csproj",
+        "projectName": "TourCompany",
+        "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\TourCompany.csproj",
+        "packagesPath": "C:\\Users\\m.chausheva\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\m.chausheva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\TourCompany.BL.csproj": {
+                "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\TourCompany.BL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AspNetCore.HealthChecks.Uris": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.2.2, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.10, )"
+            },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.17.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
