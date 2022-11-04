@@ -24,7 +24,7 @@ namespace TourCompany.Validations
             When(x => !string.IsNullOrEmpty(x.PromoCode), () =>
             {
                 RuleFor(x => x.PromoCode)
-                       .MinimumLength(10).MaximumLength(11)
+                       .MinimumLength(11).MaximumLength(12)
                        .Must(x => x.EndsWith('%')).WithMessage("Promo CODE is invalid");
             });
         }

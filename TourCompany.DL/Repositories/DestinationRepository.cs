@@ -50,5 +50,25 @@ namespace TourCompany.DL.Repositories
                 return Enumerable.Empty<Destination>();
             }
         }
+
+        public async Task<City> GetCityById(int cityId)
+        {
+            try
+            {
+                await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    await conn.OpenAsync();
+
+                    var city = await conn.QueryFirstOrDefaultAsync<City>("SELECT * FROM City WITH(NOLOCK) WHERE CityId = @CityId", new { CityId = cityId});
+
+                    return city;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in {nameof(GetCityById)} - {ex.Message}", ex);
+                return null;
+            }
+        }
     }
 }

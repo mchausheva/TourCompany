@@ -86,8 +86,9 @@ namespace TourCompany.DL.Repositories
                     var query = @"INSERT INTO Customer (CustomerName, Email, Telephone)
                                            VALUES (@CustomerName, @Email, @Telephone)";
 
-                    var result = await conn.QueryAsync<Customer>(query, customer);
-                    return customer;
+                    var result = await conn.QueryFirstOrDefaultAsync<Customer>(query, customer);
+
+                    return result;
                 }
             }
             catch (Exception ex)

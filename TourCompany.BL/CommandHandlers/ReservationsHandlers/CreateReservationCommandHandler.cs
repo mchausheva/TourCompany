@@ -13,12 +13,15 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
     {
         private readonly ILogger<CreateReservationCommandHandler> _logger;
         private readonly IReservationRepository _reservationRepository;
+        public readonly IDestinationRepository _destinationRepository;
         private readonly IMapper _mapper;
 
-        public CreateReservationCommandHandler(ILogger<CreateReservationCommandHandler> logger, IReservationRepository reservationRepository, IMapper mapper)
+        public CreateReservationCommandHandler(ILogger<CreateReservationCommandHandler> logger, IReservationRepository reservationRepository,
+                                                IDestinationRepository destinationRepository, IMapper mapper)
         {
             _logger = logger;
             _reservationRepository = reservationRepository;
+            _destinationRepository = destinationRepository;
             _mapper = mapper;
         }
 
@@ -42,6 +45,29 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                 var reservation = _mapper.Map<Reservation>(request.reservationRequest);
                 var result = await _reservationRepository.CreateReservation(reservation);
 
+                var city = await _destinationRepository.GetCityById(result.CityId);
+
+                var defaultPrice = city.PricePerNight * result.NumberOfPeople * result.Days;
+
+                switch (result.PromoCode)
+                {
+                    case "PROMOCODE5%":
+                        result.TotalPrice = defaultPrice - (defaultPrice * 0.05m);
+                            break;
+
+                    case "PROMOCODE10%":
+                        result.TotalPrice = defaultPrice - (defaultPrice * 0.1m);
+                        break;
+
+                    case "PROOCODE15%":
+                        result.TotalPrice = defaultPrice - (defaultPrice * 0.15m);
+                        break;
+
+                    default:
+                        result.TotalPrice = defaultPrice;
+                        break;
+                }
+                                
                 return new ReservationResponse()
                 {
                     HttpStatusCode = HttpStatusCode.OK,

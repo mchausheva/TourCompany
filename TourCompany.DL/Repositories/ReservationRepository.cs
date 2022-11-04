@@ -38,7 +38,7 @@ namespace TourCompany.DL.Repositories
             }
         }
 
-        public async Task<Reservation> CreateReservation(Reservation customer)
+        public async Task<Reservation> CreateReservation(Reservation reservation)
         {
             try
             {
@@ -48,8 +48,9 @@ namespace TourCompany.DL.Repositories
                     var query = @"INSERT INTO Reservation (CustomerId, ReservationDate, CityId, Days, NumberOfPeople, PromoCode)
                                            VALUES (@CustomerId, @ReservationDate, @CityId, @Days, @NumberOfPeople, @PromoCode)";
 
-                    var result = await conn.ExecuteAsync(query, customer);
-                    return customer;
+                    var result = await conn.ExecuteAsync(query, reservation);
+
+                    return reservation;
                 }
             }
             catch (Exception ex)
