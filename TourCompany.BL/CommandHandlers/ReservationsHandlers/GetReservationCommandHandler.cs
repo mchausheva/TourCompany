@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using TourCompany.DL.Interfaces;
-using TourCompany.Models.MediatR;
+using TourCompany.Models.MediatR.Reservations;
 using TourCompany.Models.Models;
 
-namespace TourCompany.BL.CommandHandlers
+namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 {
     public class GetReservationCommandHandler : IRequestHandler<GetReservationCommand, Reservation>
     {

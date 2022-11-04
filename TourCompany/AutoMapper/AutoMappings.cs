@@ -9,6 +9,7 @@ namespace TourCompany.AutoMapper
         public AutoMappings()
         {
             CreateMap<ReservationRequest, Reservation>();
+            CreateMap<CustomerRequest, Customer>();
         }
     }
 }

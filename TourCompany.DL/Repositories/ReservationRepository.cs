@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 using TourCompany.DL.Interfaces;
 using TourCompany.Models.Models;
-using TourCompany.Models.Requests;
 
 namespace TourCompany.DL.Repositories
 {
@@ -39,7 +38,7 @@ namespace TourCompany.DL.Repositories
             }
         }
 
-        public async Task<Reservation> CreateReservation(Reservation reservation)
+        public async Task<Reservation> CreateReservation(Reservation customer)
         {
             try
             {
@@ -49,8 +48,8 @@ namespace TourCompany.DL.Repositories
                     var query = @"INSERT INTO Reservation (CustomerId, ReservationDate, CityId, Days, NumberOfPeople, PromoCode)
                                            VALUES (@CustomerId, @ReservationDate, @CityId, @Days, @NumberOfPeople, @PromoCode)";
 
-                    var result = await conn.ExecuteAsync(query, reservation);
-                    return reservation;
+                    var result = await conn.ExecuteAsync(query, customer);
+                    return customer;
                 }
             }
             catch (Exception ex)

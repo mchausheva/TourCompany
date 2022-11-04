@@ -11,7 +11,8 @@ namespace TourCompany.Extentions
         {
             services.AddSingleton<IDestinationRepository, DestinationRepository>();
             services.AddSingleton<IReservationRepository, ReservationRepository>();
-
+            services.AddSingleton<ICustomerRespository, CustomerRepository>();
+            
             return services;
         }
         public static IServiceCollection RegisterServices(this IServiceCollection services)

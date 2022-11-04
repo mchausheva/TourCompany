@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Logging;
 using System.Net;
 using TourCompany.DL.Interfaces;
-using TourCompany.Models.MediatR;
+using TourCompany.Models.MediatR.Reservations;
 using TourCompany.Models.Responses;
 
-namespace TourCompany.BL.CommandHandlers
+namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 {
     public class DeleteReservationCommandHandler : IRequestHandler<DeleteReservationCommand, ReservationResponse>
     {
@@ -20,7 +20,7 @@ namespace TourCompany.BL.CommandHandlers
 
         public async Task<ReservationResponse> Handle(DeleteReservationCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Command Handler -> DELETE");
+            _logger.LogInformation("Command Handler -> DELETE Reservation");
             var result = await _reservationRepository.DeleteReservationById(request.reservationId, request.customerId);
 
             return new ReservationResponse()

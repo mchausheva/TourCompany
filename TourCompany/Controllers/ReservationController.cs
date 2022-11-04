@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using TourCompany.Models.MediatR;
-using TourCompany.Models.Models;
+using TourCompany.Models.MediatR.Customers;
+using TourCompany.Models.MediatR.Reservations;
 using TourCompany.Models.Requests;
 
 namespace TourCompany.Controllers
@@ -24,17 +24,17 @@ namespace TourCompany.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet(Name = "GetReservation")]
-        public async Task<IActionResult> GetById(int reservationId, int customerId)
+        public async Task<IActionResult> GetReservation(int reservationId, int customerId)
         {
-            if (reservationId <= 0 || customerId <= 0)
-            {
-                _logger.LogInformation("Id must be greater than 0");
-                return BadRequest($"Parameter id must be greater than 0");
-            }
+                if (reservationId <= 0 || customerId <= 0)
+                {
+                    _logger.LogInformation("Id must be greater than 0");
+                    return BadRequest($"Parameter id must be greater than 0");
+                }
 
-            var result = await _mediator.Send(new GetReservationCommand(reservationId, customerId));
+                var result = await _mediator.Send(new GetReservationCommand(reservationId, customerId));
 
-            if (result == null) return NotFound($"Not Found Reservation with Id = {reservationId} and Customer Id = {customerId}");
+                if (result == null) return NotFound($"Not Found Reservation with Id = {reservationId} and Customer Id = {customerId}");
 
             return Ok(result);
         }
@@ -63,7 +63,7 @@ namespace TourCompany.Controllers
                 return BadRequest($"Parameter id must be greater than 0");
             }
 
-            var getResult = _mediator.Send(new GetReservationCommand(reservationId, customerId));
+            var getResult = await _mediator.Send(new GetReservationCommand(reservationId, customerId));
             if (getResult == null) return NotFound($"Not Found Reservation with Id = {reservationId} and Customer Id = {customerId}");
 
 
@@ -87,7 +87,7 @@ namespace TourCompany.Controllers
                 return BadRequest($"Parameter id must be greater than 0");
             }
 
-            var getResult = _mediator.Send(new GetReservationCommand(reservationId, customerId));
+            var getResult = await _mediator.Send(new GetReservationCommand(reservationId, customerId));
             if (getResult == null) return NotFound($"Not Found Reservation with Id = {reservationId} and Customer Id = {customerId}");
 
 

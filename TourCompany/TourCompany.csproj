@@ -23,12 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Middleware\" />
-    <Folder Include="HealthChecks\" />
-    <Folder Include="Validations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TourCompany.BL\TourCompany.BL.csproj" />
   </ItemGroup>
 

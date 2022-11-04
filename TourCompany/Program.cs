@@ -5,6 +5,8 @@ using Serilog.Sinks.SystemConsole.Themes;
 using TourCompany.Extentions;
 using MediatR;
 using TourCompany.BL.CommandHandlers;
+using TourCompany.HealthChecks;
+using TourCompany.Middleware;
 
 var logger = new LoggerConfiguration()
         .Enrich.FromLogContext()
@@ -31,6 +33,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+builder.Services.AddHealthChecks()
+                .AddCheck<SqlHealthCheck>("SQL Server")
+                .AddCheck<CustomHealthCheck>("Randomm");
+
 // Add MediatR
 builder.Services.AddMediatR(typeof(GetAllDestinationsCommandHandler).Assembly);
 
@@ -50,5 +56,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//app.MapHealthChecks("/health");
+app.RegisterHealthCkecks();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.Run();
