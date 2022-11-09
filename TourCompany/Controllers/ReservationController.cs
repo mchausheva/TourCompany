@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Net;
-using TourCompany.Models.MediatR.Customers;
+using TourCompany.BL.Kafka;
 using TourCompany.Models.MediatR.Reservations;
 using TourCompany.Models.Requests;
 
@@ -13,11 +15,13 @@ namespace TourCompany.Controllers
     {
         private readonly ILogger<ReservationController> _logger;
         private readonly IMediator _mediator;
+        private readonly ReservationProducer _producer;
 
-        public ReservationController(ILogger<ReservationController> logger, IMediator mediator)
+        public ReservationController(ILogger<ReservationController> logger, IMediator mediator, ReservationProducer reservationProducer)
         {
             _logger = logger;
             _mediator = mediator;
+            _producer = reservationProducer;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -45,6 +49,8 @@ namespace TourCompany.Controllers
         public async Task<IActionResult> CreateReservation([FromBody] ReservationRequest reservationRequest) 
         {
             var result = await _mediator.Send(new CreateReservationCommand(reservationRequest));
+            
+            await _producer.SendMessage(result.Reservation, new CancellationToken());
 
             if (result.HttpStatusCode == HttpStatusCode.BadRequest)
                 return BadRequest(result);
@@ -68,6 +74,8 @@ namespace TourCompany.Controllers
 
 
             var result = await _mediator.Send(new UpdateReservationCommand(reservationId, reservationRequest));
+
+            await _producer.SendMessage(result.Reservation, new CancellationToken());
 
             if (result.HttpStatusCode == HttpStatusCode.BadRequest)
                 return BadRequest(result);

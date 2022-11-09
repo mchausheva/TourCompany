@@ -1,4 +1,4 @@
-namespace TourCompany
+namespace WebAPITourCompany
 {
     public class WeatherForecast
     {

@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TourCompany.BL\TourCompany.BL.csproj" />
+    <ProjectReference Include="..\TourCompany.Caches\TourCompany.Caches.csproj" />
   </ItemGroup>
 
 </Project>

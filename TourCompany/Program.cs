@@ -1,12 +1,14 @@
-using FluentValidation.AspNetCore;
 using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using TourCompany.Extentions;
-using MediatR;
 using TourCompany.BL.CommandHandlers;
+using TourCompany.BL.Kafka;
+using TourCompany.Extentions;
 using TourCompany.HealthChecks;
 using TourCompany.Middleware;
+using TourCompany.Models.Configurations;
 
 var logger = new LoggerConfiguration()
         .Enrich.FromLogContext()
@@ -16,6 +18,13 @@ var logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddSerilog(logger);
+
+builder.Services.Configure<KafkaConfig>(
+    builder.Configuration.GetSection(nameof(KafkaConfig)));
+
+builder.Services.Configure<MongoDbConfiguration>(
+    builder.Configuration.GetSection(nameof(MongoDbConfiguration)));
+
 
 // Add services to the container.
 builder.Services.RegisterRepositories()
@@ -34,8 +43,10 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddHealthChecks()
+                .AddUrlGroup(new Uri("https://thetourcompany.co.uk/about/"), name: "About The Tour Company")
+                .AddCheck<KafkaHealthCheck>("Kafka Settings")
                 .AddCheck<SqlHealthCheck>("SQL Server")
-                .AddCheck<CustomHealthCheck>("Randomm");
+                .AddCheck<MongoHealthCheck>("MongoDB");
 
 // Add MediatR
 builder.Services.AddMediatR(typeof(GetAllDestinationsCommandHandler).Assembly);
@@ -60,6 +71,6 @@ app.MapControllers();
 //app.MapHealthChecks("/health");
 app.RegisterHealthCkecks();
 
-app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.Run();

@@ -24,7 +24,7 @@ namespace TourCompany.HealthChecks
                 {
                     return HealthCheckResult.Unhealthy(ex.Message);
                 }
-                return HealthCheckResult.Healthy("SQL coonection is OK");
+                return HealthCheckResult.Healthy("SQL connection is OK");
             }
         }
     }

@@ -24,9 +24,10 @@ namespace TourCompany.DL.Repositories
                 {
                     await conn.OpenAsync();
 
-                    return await conn.QueryFirstOrDefaultAsync<IEnumerable<Reservation>>(@"SELECT * FROM Reservation WITH(NOLOCK) 
+                    var result = await conn.QueryAsync<Reservation>(@"SELECT * FROM Reservation WITH(NOLOCK) 
                                                                             WHERE CustomerId = @CustomerId",
                                                                             new { CustomerId = customerId });
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -84,7 +85,8 @@ namespace TourCompany.DL.Repositories
                 {
                     await conn.OpenAsync();
                     var query = @"INSERT INTO Customer (CustomerName, Email, Telephone)
-                                           VALUES (@CustomerName, @Email, @Telephone)";
+                                  OUTPUT INSERTED.CustomerId, INSERTED.CustomerName, INSERTED.Email, iNSERTED.Telephone
+                                  VALUES (@CustomerName, @Email, @Telephone)";
 
                     var result = await conn.QueryFirstOrDefaultAsync<Customer>(query, customer);
 
@@ -107,10 +109,11 @@ namespace TourCompany.DL.Repositories
                     await conn.OpenAsync();
                     var query = @$"UPDATE Customer SET
                                  CustomerName = @CustomerName, Email = @Email, Telephone = @Telephone
+                                 OUTPUT INSERTED .*
                                  WHERE CustomerId = {customerId}";
 
-                    var result = await conn.ExecuteAsync(query, customer);
-                    return customer;
+                    var result = await conn.QueryFirstOrDefaultAsync<Customer>(query, customer);
+                    return result;
                 }
             }
             catch (Exception ex)

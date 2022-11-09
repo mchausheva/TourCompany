@@ -43,31 +43,11 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                 }
 
                 var reservation = _mapper.Map<Reservation>(request.reservationRequest);
+
+                reservation = UpdateTotalPrice(_destinationRepository, reservation).Result;
+
                 var result = await _reservationRepository.CreateReservation(reservation);
 
-                var city = await _destinationRepository.GetCityById(result.CityId);
-
-                var defaultPrice = city.PricePerNight * result.NumberOfPeople * result.Days;
-
-                switch (result.PromoCode)
-                {
-                    case "PROMOCODE5%":
-                        result.TotalPrice = defaultPrice - (defaultPrice * 0.05m);
-                            break;
-
-                    case "PROMOCODE10%":
-                        result.TotalPrice = defaultPrice - (defaultPrice * 0.1m);
-                        break;
-
-                    case "PROOCODE15%":
-                        result.TotalPrice = defaultPrice - (defaultPrice * 0.15m);
-                        break;
-
-                    default:
-                        result.TotalPrice = defaultPrice;
-                        break;
-                }
-                                
                 return new ReservationResponse()
                 {
                     HttpStatusCode = HttpStatusCode.OK,
@@ -80,6 +60,33 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                 _logger.LogWarning($"The Reservation Failed");
                 throw;
             }
+        }
+
+        public async Task<Reservation> UpdateTotalPrice(IDestinationRepository destination, Reservation reservation)
+        {
+            var city = await destination.GetCityById(reservation.CityId);
+            var defaultPrice = city.PricePerNight * reservation.NumberOfPeople * reservation.Days;
+
+            switch (reservation.PromoCode)
+            {
+                case "PROMOCODE5%":
+                    reservation.TotalPrice = defaultPrice - (defaultPrice * 0.05m);
+                    break;
+
+                case "PROMOCODE10%":
+                    reservation.TotalPrice = defaultPrice - (defaultPrice * 0.1m);
+                    break;
+
+                case "PROOCODE15%":
+                    reservation.TotalPrice = defaultPrice - (defaultPrice * 0.15m);
+                    break;
+
+                default:
+                    reservation.TotalPrice = defaultPrice;
+                    break;
+            }
+
+            return reservation;
         }
     }
 }

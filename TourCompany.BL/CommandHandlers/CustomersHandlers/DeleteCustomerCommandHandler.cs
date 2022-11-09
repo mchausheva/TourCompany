@@ -26,7 +26,7 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
             return new CustomerResponse()
             {
                 HttpStatusCode = HttpStatusCode.OK,
-                Message = "You Successfully Deleted Your Reservation."
+                Message = "You Successfully Deleted Your Account."
             };
         }
     }

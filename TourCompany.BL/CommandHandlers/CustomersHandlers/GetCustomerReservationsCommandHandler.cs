@@ -6,12 +6,12 @@ using TourCompany.Models.Models;
 
 namespace TourCompany.BL.CommandHandlers.CustomersHandlers
 {
-    public record GetReservationsCommandHandler : IRequestHandler<GetCustomerReservationsCommand, IEnumerable<Reservation>>
+    public record GetCustomerReservationsCommandHandler : IRequestHandler<GetCustomerReservationsCommand, IEnumerable<Reservation>>
     {
-        private readonly ILogger<GetReservationsCommandHandler> _logger;
+        private readonly ILogger<GetCustomerReservationsCommandHandler> _logger;
         private readonly ICustomerRespository _customerRespository;
 
-        public GetReservationsCommandHandler(ILogger<GetReservationsCommandHandler> logger, ICustomerRespository customerRespository)
+        public GetCustomerReservationsCommandHandler(ILogger<GetCustomerReservationsCommandHandler> logger, ICustomerRespository customerRespository)
         {
             _logger = logger;
             _customerRespository = customerRespository;

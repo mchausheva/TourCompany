@@ -45,12 +45,13 @@ namespace TourCompany.DL.Repositories
                 await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
                 {
                     await conn.OpenAsync();
-                    var query = @"INSERT INTO Reservation (CustomerId, ReservationDate, CityId, Days, NumberOfPeople, PromoCode)
-                                           VALUES (@CustomerId, @ReservationDate, @CityId, @Days, @NumberOfPeople, @PromoCode)";
+                    var query = @"INSERT INTO Reservation (CustomerId, ReservationDate, CityId, Days, NumberOfPeople, PromoCode, TotalPrice)
+                                OUTPUT INSERTED.ReservationId, INSERTED.CustomerId, INSERTED.ReservationDate, INSERTED.CityId, INSERTED.Days, INSERTED.NumberOfPeople, INSERTED.PromoCode   
+                                VALUES (@CustomerId, @ReservationDate, @CityId, @Days, @NumberOfPeople, @PromoCode, @TotalPrice)";
 
-                    var result = await conn.ExecuteAsync(query, reservation);
+                    var result = await conn.QueryFirstOrDefaultAsync<Reservation>(query, reservation);
 
-                    return reservation;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -69,12 +70,13 @@ namespace TourCompany.DL.Repositories
                     await conn.OpenAsync();
                     var query = @$"UPDATE Reservation SET
                                  CustomerId = @CustomerId, ReservationDate = @ReservationDate, CityId = @CityId, 
-                                 Days = @Days, NumberOfPeople = @NumberOfPeople, PromoCode = @PromoCode
+                                 Days = @Days, NumberOfPeople = @NumberOfPeople, PromoCode = @PromoCode, TotalPrice = @TotalPrice
+                                 OUTPUT INSERTED .*
                                  WHERE ReservationId = {reservationId}";
 
-                    var result = await conn.ExecuteAsync(query, reservation);
+                    var result = await conn.QueryFirstOrDefaultAsync<Reservation>(query, reservation);
 
-                    return reservation;
+                    return result;
                 }
             }
             catch (Exception ex)

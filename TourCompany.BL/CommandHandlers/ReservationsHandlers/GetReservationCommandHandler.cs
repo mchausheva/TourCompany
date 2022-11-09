@@ -8,10 +8,10 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 {
     public class GetReservationCommandHandler : IRequestHandler<GetReservationCommand, Reservation>
     {
-        private readonly ILogger<GetAllDestinationsCommandHandler> _logger;
+        private readonly ILogger<GetReservationCommandHandler> _logger;
         private readonly IReservationRepository _reservationRepository;
 
-        public GetReservationCommandHandler(ILogger<GetAllDestinationsCommandHandler> logger, IReservationRepository reservationRepository)
+        public GetReservationCommandHandler(ILogger<GetReservationCommandHandler> logger, IReservationRepository reservationRepository)
         {
             _logger = logger;
             _reservationRepository = reservationRepository;

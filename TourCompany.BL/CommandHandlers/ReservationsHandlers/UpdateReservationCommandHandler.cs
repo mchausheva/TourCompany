@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using TourCompany.DL.Interfaces;
+using TourCompany.DL.Repositories;
 using TourCompany.Models.MediatR.Reservations;
 using TourCompany.Models.Models;
 using TourCompany.Models.Responses;
@@ -14,12 +15,14 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
         private readonly ILogger<UpdateReservationCommandHandler> _logger;
         private readonly IMapper _mapper;
         private readonly IReservationRepository _reservationRepository;
+        public readonly IDestinationRepository _destinationRepository;
 
-        public UpdateReservationCommandHandler(ILogger<UpdateReservationCommandHandler> logger, IMapper mapper, IReservationRepository reservationRepository)
+        public UpdateReservationCommandHandler(ILogger<UpdateReservationCommandHandler> logger, IMapper mapper, IReservationRepository reservationRepository, IDestinationRepository destinationRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _reservationRepository = reservationRepository;
+            _destinationRepository = destinationRepository;
         }
 
         public async Task<ReservationResponse> Handle(UpdateReservationCommand request, CancellationToken cancellationToken)
@@ -39,7 +42,10 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                     };
                 }
 
-                var reservation = _mapper.Map<Reservation>(request.reservationRequest);
+                var tempReservation = _mapper.Map<Reservation>(request.reservationRequest);
+
+                var reservation = UpdateTotalPrice(_destinationRepository, tempReservation).Result;
+
                 var result = await _reservationRepository.UpdateReservation(request.reservationId, reservation);
 
                 if (result == null)
@@ -63,6 +69,32 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                 _logger.LogWarning($"The reservation had failed.");
                 throw;
             }
+        }
+
+        public async Task<Reservation> UpdateTotalPrice(IDestinationRepository destination, Reservation reservation)
+        {
+            var city = await destination.GetCityById(reservation.CityId);
+            var defaultPrice = city.PricePerNight * reservation.NumberOfPeople * reservation.Days;
+
+            switch (reservation.PromoCode)
+            {
+                case "PROMOCODE5%":
+                    reservation.TotalPrice = defaultPrice - (defaultPrice * 0.05m);
+                    break;
+
+                case "PROMOCODE10%":
+                    reservation.TotalPrice = defaultPrice - (defaultPrice * 0.1m);
+                    break;
+
+                case "PROOCODE15%":
+                    reservation.TotalPrice = defaultPrice - (defaultPrice * 0.15m);
+                    break;
+
+                default:
+                    reservation.TotalPrice = defaultPrice;
+                    break;
+            }
+            return reservation;
         }
     }
 }
