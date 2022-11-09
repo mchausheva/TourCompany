@@ -61,7 +61,11 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
             catch (Exception ex)
             {
                 _logger.LogWarning($"The update of your account failed.");
-                throw;
+                return new CustomerResponse
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "The update of your account failed!"
+                };
             }
         }
     }

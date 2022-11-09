@@ -57,8 +57,12 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning($"The Reservation Failed");
-                throw;
+                _logger.LogWarning($"The Reservation Failed --> {ex.Message}");
+                return new ReservationResponse
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "The Reservation Failed!"
+                };
             }
         }
 

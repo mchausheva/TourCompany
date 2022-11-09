@@ -20,7 +20,16 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
         public async Task<Customer> Handle(GetCustomerByIdCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Command Handler --> Get Customer");
-            return await _customerRespository.GetCustomerById(request.customerId);
+
+            try
+            {
+                return await _customerRespository.GetCustomerById(request.customerId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Failed to get Customer --> {ex.Message}");
+                return null;
+            }
         }
     }
 }

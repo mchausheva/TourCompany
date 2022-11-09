@@ -21,13 +21,26 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
         public async Task<ReservationResponse> Handle(DeleteReservationCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Command Handler -> DELETE Reservation");
-            var result = await _reservationRepository.DeleteReservationById(request.reservationId, request.customerId);
 
-            return new ReservationResponse()
+            try
             {
-                HttpStatusCode = HttpStatusCode.OK,
-                Message = "You Successfully Deleted Your Reservation."
-            };
+                var result = await _reservationRepository.DeleteReservationById(request.reservationId, request.customerId);
+
+                return new ReservationResponse()
+                {
+                    HttpStatusCode = HttpStatusCode.OK,
+                    Message = "You Successfully Deleted Your Reservation."
+                };
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogWarning($"The deletion of the reservation failed --> {ex.Message}");
+                return new ReservationResponse()
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "The deletion of the reservation failed!"
+                };
+            }
         }
     }
 }

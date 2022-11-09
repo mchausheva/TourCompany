@@ -27,6 +27,8 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 
         public async Task<ReservationResponse> Handle(UpdateReservationCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Command Handler - UPDATE Reservation");
+
             try
             {
                 var requestDate = request.reservationRequest.ReservationDate;
@@ -66,8 +68,12 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning($"The reservation had failed.");
-                throw;
+                _logger.LogWarning($"The updation failed.");
+                return new ReservationResponse
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "The updation failed!"
+                };
             }
         }
 

@@ -20,7 +20,16 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
         public async Task<Reservation> Handle(GetReservationCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Command Handler - GET Reservation");
-            return await _reservationRepository.GetById(request.reservationId, request.customerId);
+
+            try
+            {
+                return await _reservationRepository.GetById(request.reservationId, request.customerId);
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogWarning($"Failed to get reservation --> {ex.Message}");
+                return null;
+            }
         }
     }
 }

@@ -21,11 +21,20 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
         {
             _logger.LogInformation("Command Handler --> Get Customer's Reservations");
 
-            var customer = _customerRespository.GetCustomerById(request.customerId).Result;
+            try
+            {
+                var customer = _customerRespository.GetCustomerById(request.customerId).Result;
 
-            if (customer == null) return null;
+                if (customer == null) return null;
 
-            return await _customerRespository.GetReservations(request.customerId);
+                return await _customerRespository.GetReservations(request.customerId);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Failed to get Cusomer's reservations --> {ex.Message}");
+                return null;
+            }
         }
     }
 }

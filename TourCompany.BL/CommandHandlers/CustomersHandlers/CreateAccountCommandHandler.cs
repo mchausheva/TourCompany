@@ -49,8 +49,13 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning($"The Account Creation Failed");
-                throw;
+                _logger.LogWarning($"The Account Creation Failed with message --> {ex.Message}");
+                return new CustomerResponse
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "The Account Creation Failed!",
+                    Customer = null
+                };
             }
         }
     }

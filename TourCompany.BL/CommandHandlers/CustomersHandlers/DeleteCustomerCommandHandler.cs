@@ -21,13 +21,26 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
         public async Task<CustomerResponse> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Command Handler -> DELETE Account");
-            var result = await _customerRepository.DeleteAccount(request.customerId);
-
-            return new CustomerResponse()
+            try
             {
-                HttpStatusCode = HttpStatusCode.OK,
-                Message = "You Successfully Deleted Your Account."
-            };
+                var result = await _customerRepository.DeleteAccount(request.customerId);
+
+                return new CustomerResponse()
+                {
+                    HttpStatusCode = HttpStatusCode.OK,
+                    Message = "You Successfully Deleted Your Account."
+                };
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"The Account Deletion Failed with message --> {ex.Message}");
+                return new CustomerResponse()
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "The Account Deletion Failed!"
+                };
+            }
         }
     }
 }
