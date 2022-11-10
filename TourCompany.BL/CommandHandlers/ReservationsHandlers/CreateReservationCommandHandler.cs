@@ -54,6 +54,8 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                     Message = "You Successfully Created Your Reservation!",
                     Reservation = result
                 };
+
+                
             }
             catch (Exception ex)
             {

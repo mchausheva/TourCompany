@@ -31,6 +31,16 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 
             try
             {
+                var getResult = await _reservationRepository.GetById(request.reservationId, request.reservationRequest.CustomerId);
+                if (getResult == null)
+                {
+                    return new ReservationResponse
+                    {
+                        HttpStatusCode = HttpStatusCode.NotFound,
+                        Message = $"Not Found Reservation with Id = {request.reservationId} and Customer Id = {request.reservationRequest.CustomerId}"
+                    };
+                }
+                
                 var requestDate = request.reservationRequest.ReservationDate;
 
                 var validDate = DateTime.Compare(requestDate, DateTime.Today);

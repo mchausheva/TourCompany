@@ -1,13 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Net;
 using TourCompany.Controllers;
-using TourCompany.DL.Interfaces;
 using TourCompany.Models.MediatR;
-using TourCompany.Models.Models;
 
 namespace TourCompany.UnitTests
 {
@@ -23,10 +19,9 @@ namespace TourCompany.UnitTests
         }
 
         [Fact]
-        public async Task Get_Destinations()
+        public async Task Get_Destinations_Ok()
         {
             //set up
-
             _mediator.Setup(x => x.Send(new Mock<GetAllDestinationCommand>(), new CancellationToken()));
 
             //inject

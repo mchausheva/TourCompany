@@ -23,7 +23,7 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
 
             try
             {
-                var customer = _customerRespository.GetCustomerById(request.customerId).Result;
+                var customer = await _customerRespository.GetCustomerById(request.customerId);
 
                 if (customer == null) return null;
 

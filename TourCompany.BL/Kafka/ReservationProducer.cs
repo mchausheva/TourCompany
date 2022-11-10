@@ -5,7 +5,6 @@ using System.Threading.Tasks.Dataflow;
 using TourCompany.BL.Kafka.Serializer;
 using TourCompany.Models.Configurations;
 using TourCompany.Models.Models;
-using TourCompany.Models.Responses;
 
 namespace TourCompany.BL.Kafka
 {

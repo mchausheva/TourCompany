@@ -23,6 +23,16 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
             _logger.LogInformation("Command Handler -> DELETE Account");
             try
             {
+                var exist = await _customerRepository.GetCustomerById(request.customerId);
+                if (exist == null)
+                {
+                    return new CustomerResponse()
+                    {
+                        HttpStatusCode = HttpStatusCode.OK,
+                        Message = "This account doesn't exist."
+                    };
+                }
+
                 var result = await _customerRepository.DeleteAccount(request.customerId);
 
                 return new CustomerResponse()

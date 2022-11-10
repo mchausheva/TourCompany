@@ -24,6 +24,16 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 
             try
             {
+                var getResult = await _reservationRepository.GetById(request.reservationId, request.customerId);
+                if (getResult == null)
+                {
+                    return new ReservationResponse
+                    {
+                        HttpStatusCode = HttpStatusCode.NotFound,
+                        Message = $"Not Found Reservation with Id = {request.reservationId} and Customer Id = {request.customerId}"
+                    };
+                }
+
                 var result = await _reservationRepository.DeleteReservationById(request.reservationId, request.customerId);
 
                 return new ReservationResponse()

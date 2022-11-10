@@ -2,9 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using TourCompany.BL.CommandHandlers.ReservationsHandlers;
 using TourCompany.DL.Interfaces;
-using TourCompany.DL.Repositories;
 using TourCompany.Models.MediatR.Customers;
 using TourCompany.Models.Models;
 using TourCompany.Models.Responses;
@@ -28,17 +26,16 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
         {
             try
             {
-                var customerExist = _customerRespository.GetCustomerByEmail(request.request.Email).Result;
-
-                if (customerExist != null)
+                var exist = await _customerRespository.GetCustomerById(request.customerId);
+                if(exist == null)
                 {
                     return new CustomerResponse
                     {
                         HttpStatusCode = HttpStatusCode.BadRequest,
-                        Message = "This account already exists."
+                        Message = "The account doesn't exist."
                     };
                 }
-
+                
                 var customer = _mapper.Map<Customer>(request.request);
                 var result = await _customerRespository.UpdateAccount(request.customerId, customer);
 
