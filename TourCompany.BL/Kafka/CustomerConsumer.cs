@@ -20,7 +20,7 @@ namespace TourCompany.BL.Kafka
         private TransformBlock<Customer, Customer> _transformerBlock;
         private readonly IMapper _mapper;
 
-        public CustomerConsumer(IOptions<KafkaConfig> kafkaConfig, ILogger<CustomerConsumer> logger, 
+        public CustomerConsumer(IOptions<KafkaConfig> kafkaConfig, ILogger<CustomerConsumer> logger,
                     ICustomerRespositoryMongo customerRespositoryMongo, ICustomerRespository customerRespository, IMapper mapper)
                     : base(kafkaConfig, logger)
         {
@@ -30,7 +30,7 @@ namespace TourCompany.BL.Kafka
             _customerRepository = customerRespository;
             _mapper = mapper;
 
-            _transformerBlock = new TransformBlock<Customer, Customer>( async customer =>
+            _transformerBlock = new TransformBlock<Customer, Customer>(async customer =>
             {
                 try
                 {
@@ -77,7 +77,6 @@ namespace TourCompany.BL.Kafka
 
             var actionBlock = new ActionBlock<Customer>(customer =>
             {
-                _transformerBlock.Post(customer);
                 _logger.LogInformation($"RECEIVED Reservation Consumer ---> {customer.CustomerId} ");
             });
 
@@ -87,6 +86,7 @@ namespace TourCompany.BL.Kafka
         public override void HandleMessage(Customer value)
         {
             _logger.LogInformation("Handle Message");
+
             _transformerBlock.SendAsync(value);
         }
     }

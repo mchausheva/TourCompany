@@ -16,7 +16,7 @@ namespace TourCompany.BL.Kafka
         private readonly ILogger<ReservationConsumer> _logger;
         private readonly IOptions<KafkaConfig> _kafkaConfig;
         private readonly IReservationRepositoryMongo _resesrvationRepositoryMongo;
-        private TransformBlock<Reservation, Reservation> transformerBlock;
+        private TransformBlock<Reservation, (Reservation, ReservationMongoRequest)> transformerBlock;
         private readonly IMapper _mapper;
 
         public ReservationConsumer(IOptions<KafkaConfig> kafkaConfig, ILogger<ReservationConsumer> logger, IReservationRepositoryMongo resesrvationRepository, IMapper mapper)
@@ -28,45 +28,40 @@ namespace TourCompany.BL.Kafka
             _resesrvationRepositoryMongo = resesrvationRepository;
             _mapper = mapper;
 
-            transformerBlock = new TransformBlock<Reservation, Reservation>(async res =>
+            transformerBlock = new TransformBlock<Reservation, (Reservation, ReservationMongoRequest)>(async res =>
+            {
+                var reservation = _mapper.Map<ReservationMongoRequest>(res);
+                var result = await _resesrvationRepositoryMongo.GetById(reservation.ReservationId);
+                return (res, result);
+            });
+
+            var actionBlock = new ActionBlock<(Reservation, ReservationMongoRequest)>( async res =>
             {
                 try
                 {
-                    var reservation = _mapper.Map<ReservationMongoRequest>(res);
-                    var result = await _resesrvationRepositoryMongo.GetById(reservation.ReservationId);
-                    if (result != null)
+                    if (res.Item2 != null)
                     {
-                        if (result.ReservationDate < DateTime.Now)
+                        if (res.Item2.ReservationDate < DateTime.Now)
                         {
-                            _logger.LogInformation("DELETE from MongoDB");
-                            var temp = await _resesrvationRepositoryMongo.DeleteReservationById(res.ReservationId, res.CustomerId);
-                            return _mapper.Map<Reservation>(temp);
+                            _logger.LogInformation("DELETE Reservation from MongoDB");
+                            var temp = await _resesrvationRepositoryMongo.DeleteReservationById(res.Item1.ReservationId, res.Item1.CustomerId);
                         }
                         else
                         {
-                            _logger.LogInformation("UPDATE MongoDB");
-                            var temp = await _resesrvationRepositoryMongo.UpdateReservation(res);
-                            return _mapper.Map<Reservation>(temp);
+                            _logger.LogInformation("UPDATE Reservation MongoDB");
+                            var temp = await _resesrvationRepositoryMongo.UpdateReservation(res.Item1);
                         }
                     }
                     else
                     {
-                        _logger.LogInformation("SAVE in Mongo");
-                        var temp = await _resesrvationRepositoryMongo.SaveReservation(res);
-                        return _mapper.Map<Reservation>(temp);
+                        _logger.LogInformation("SAVE Reservation in Mongo");
+                        var temp = await _resesrvationRepositoryMongo.SaveReservation(res.Item1);
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Exception/Error in consumer -- > {ex.Message}");
+                    _logger.LogError($"Exception/Error in consumer reservation -- > {ex.Message}");
                 }
-                return null;
-            });
-
-            var actionBlock = new ActionBlock<Reservation>(res =>
-            {
-                transformerBlock.Post(res);
-                _logger.LogInformation($"RECEIVED Reservation Consumer ---> {res.ReservationId} ");
             });
 
             transformerBlock.LinkTo(actionBlock);
