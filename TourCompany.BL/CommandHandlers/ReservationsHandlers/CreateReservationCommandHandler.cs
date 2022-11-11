@@ -45,9 +45,9 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                     };
                 }
 
-                var reservation = _mapper.Map<Reservation>(request.reservationRequest);
+                var tempRreservation = _mapper.Map<Reservation>(request.reservationRequest);
 
-                reservation = UpdateTotalPrice(_destinationRepository, reservation).Result;
+                var reservation = UpdateTotalPrice(_destinationRepository, tempRreservation).Result;
 
                 var result = await _reservationRepository.CreateReservation(reservation);
 
@@ -98,7 +98,6 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                     reservation.TotalPrice = defaultPrice;
                     break;
             }
-
             return reservation;
         }
     }

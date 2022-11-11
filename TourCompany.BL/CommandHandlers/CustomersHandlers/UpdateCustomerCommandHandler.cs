@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using TourCompany.BL.Kafka;
 using TourCompany.DL.Interfaces;
 using TourCompany.Models.MediatR.Customers;
 using TourCompany.Models.Models;
@@ -15,11 +16,15 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
         private readonly ICustomerRespository _customerRespository;
         private readonly IMapper _mapper;
 
-        public UpdateCustomerCommandHandler(ILogger<UpdateCustomerCommandHandler> logger, ICustomerRespository customerRespository, IMapper mapper)
+        private readonly IProducerService<int, Customer> _producer;
+
+        public UpdateCustomerCommandHandler(ILogger<UpdateCustomerCommandHandler> logger, ICustomerRespository customerRespository, 
+                IMapper mapper, IProducerService<int, Customer> producer)
         {
             _logger = logger;
             _customerRespository = customerRespository;
             _mapper = mapper;
+            _producer = producer;
         }
 
         public async Task<CustomerResponse> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
@@ -47,6 +52,8 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
                         Message = "The account could not be updated."
                     };
                 }
+
+                await _producer.SendMessage(result, cancellationToken);
 
                 return new CustomerResponse()
                 {

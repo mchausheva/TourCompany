@@ -49,12 +49,13 @@ namespace TourCompany.DL.Repositories
             return document;
         }
 
-        public async Task<CustomerMongoRequest> UpdateCustomer(Customer customer)
+        public async Task<CustomerMongoRequest> UpdateCustomer(CustomerMongoRequest customer)
         {
             var filter = Builders<CustomerMongoRequest>.Filter.Eq("CustomerId", customer.CustomerId);
             var update = Builders<CustomerMongoRequest>.Update.Set("CustomerName", customer.CustomerName)
                                                               .Set("Email", customer.Email)
-                                                              .Set("Telephone", customer.Telephone);
+                                                              .Set("Telephone", customer.Telephone)
+                                                              .Set("ReservationCount", customer.ReservationCount);
 
             var result = await _customerCollection.FindOneAndUpdateAsync(filter, update);
 

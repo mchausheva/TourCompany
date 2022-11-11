@@ -43,10 +43,9 @@ namespace TourCompany.BL.Kafka
                     {
                         _logger.LogInformation("UPDATE Customer in Mongo");
 
-
-                        var temp = await _customerRepositoryMongo.UpdateCustomer(customer);
-
                         existedCustomer.ReservationCount += customerReservation.Count();
+
+                        var temp = await _customerRepositoryMongo.UpdateCustomer(existedCustomer);
 
                         if (existedCustomer.ReservationCount > 20 && existedCustomer.ReservationCount <= 40)
                             _logger.LogInformation("Send a promo code for 5% off via email.");
