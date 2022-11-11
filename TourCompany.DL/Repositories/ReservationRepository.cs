@@ -17,6 +17,24 @@ namespace TourCompany.DL.Repositories
             _configuration = configuration;
         }
 
+        public async Task<IEnumerable<Reservation>> GetAll()
+        {
+            try
+            {
+                await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    await conn.OpenAsync();
+
+                    return await conn.QueryAsync<Reservation>(@"SELECT * FROM Reservation WITH(NOLOCK)");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in {nameof(GetAll)} - {ex.Message}", ex);
+                return Enumerable.Empty<Reservation>();
+            }
+        }
+
         public async Task<Reservation?> GetById(int reservationId, int customerId)
         {
             try

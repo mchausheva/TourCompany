@@ -22,7 +22,7 @@ namespace TourCompany.DL.Repositories
 
             _database = _dbClient.GetDatabase(_options.Value.DatabaseName);
 
-            _reservationCollection = _database.GetCollection<ReservationMongoRequest>(_options.Value.CollectionName);
+            _reservationCollection = _database.GetCollection<ReservationMongoRequest>(_options.Value.ReservationCollectionName);
         }
 
         public async Task<ReservationMongoRequest> GetById(int reservationId)
@@ -37,7 +37,7 @@ namespace TourCompany.DL.Repositories
             return doc;
         }
 
-        public Task<ReservationMongoRequest> SaveReservation(Reservation reservation)
+        public async Task<ReservationMongoRequest> SaveReservation(Reservation reservation)
         {
             var document = new ReservationMongoRequest()
             {
@@ -53,7 +53,7 @@ namespace TourCompany.DL.Repositories
 
             _reservationCollection.InsertOne(document);
 
-            return Task.FromResult(document);
+            return document;
         }
 
         public async Task<ReservationMongoRequest> UpdateReservation(Reservation reservation)

@@ -13,6 +13,9 @@ namespace TourCompany.AutoMapper
 
             CreateMap<Reservation, ReservationMongoRequest>();
             CreateMap<ReservationMongoRequest, Reservation>();
+
+            CreateMap<Customer, CustomerMongoRequest>();
+            CreateMap<CustomerMongoRequest, Customer>();
         }
     }
 }

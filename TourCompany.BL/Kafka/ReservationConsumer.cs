@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks.Dataflow;
@@ -9,7 +10,7 @@ using TourCompany.Models.Requests;
 
 namespace TourCompany.BL.Kafka
 {
-    public class ReservationConsumer : ConsumerHostedService<int, Reservation>
+    public class ReservationConsumer : ConsumerHostedService<int, Reservation>, IHostedService
     {
 
         private readonly ILogger<ReservationConsumer> _logger;
@@ -23,6 +24,7 @@ namespace TourCompany.BL.Kafka
         {
             _logger = logger;
             _kafkaConfig = kafkaConfig;
+
             _resesrvationRepositoryMongo = resesrvationRepository;
             _mapper = mapper;
 
@@ -30,11 +32,8 @@ namespace TourCompany.BL.Kafka
             {
                 try
                 {
-
                     var reservation = _mapper.Map<ReservationMongoRequest>(res);
-
                     var result = await _resesrvationRepositoryMongo.GetById(reservation.ReservationId);
-
                     if (result != null)
                     {
                         if (result.ReservationDate < DateTime.Now)

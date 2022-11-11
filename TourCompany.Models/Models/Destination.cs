@@ -9,9 +9,9 @@ namespace TourCompany.Models.Models
         //public int CityId { get; set; }
         //public string CityName { get; set; }
 
-        [Key(1)]
+        [Key(0)]
         public Country Country { get; set; }
-        [Key(2)]
+        [Key(1)]
         public List<City> Cities { get; set; }
     }
 }

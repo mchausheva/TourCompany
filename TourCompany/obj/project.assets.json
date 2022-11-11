@@ -1377,22 +1377,6 @@
           "bin/placeholder/TourCompany.BL.dll": {}
         }
       },
-      "TourCompany.Caches/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "Confluent.Kafka": "1.9.3",
-          "Serilog": "2.10.0",
-          "TourCompany.BL": "1.0.0",
-          "TourCompany.Models": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/TourCompany.Caches.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/TourCompany.Caches.dll": {}
-        }
-      },
       "TourCompany.DL/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -3341,11 +3325,6 @@
       "path": "../TourCompany.BL/TourCompany.BL.csproj",
       "msbuildProject": "../TourCompany.BL/TourCompany.BL.csproj"
     },
-    "TourCompany.Caches/1.0.0": {
-      "type": "project",
-      "path": "../TourCompany.Caches/TourCompany.Caches.csproj",
-      "msbuildProject": "../TourCompany.Caches/TourCompany.Caches.csproj"
-    },
     "TourCompany.DL/1.0.0": {
       "type": "project",
       "path": "../TourCompany.DL/TourCompany.DL.csproj",
@@ -3369,8 +3348,7 @@
       "Newtonsoft.Json >= 13.0.1",
       "Serilog.AspNetCore >= 6.0.1",
       "Swashbuckle.AspNetCore >= 6.2.3",
-      "TourCompany.BL >= 1.0.0",
-      "TourCompany.Caches >= 1.0.0"
+      "TourCompany.BL >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -3402,9 +3380,6 @@
           "projectReferences": {
             "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\TourCompany.BL.csproj": {
               "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.BL\\TourCompany.BL.csproj"
-            },
-            "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Caches\\TourCompany.Caches.csproj": {
-              "projectPath": "C:\\Users\\m.chausheva\\Documents\\Git\\TourCompany\\TourCompany.Caches\\TourCompany.Caches.csproj"
             }
           }
         }

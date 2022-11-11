@@ -5,13 +5,13 @@ namespace TourCompany.Models.Models
     [MessagePackObject]
     public class City
     {
-        [Key(1)]
+        [Key(0)]
         public int CityId { get; set; }
-        [Key(2)]
+        [Key(1)]
         public string CityName { get; set; }
-        [Key(3)]
+        [Key(2)]
         public decimal PricePerNight { get; set; }
-        [Key(4)]
+        [Key(3)]
         public int CountryId { get; set; }
     }
 }
