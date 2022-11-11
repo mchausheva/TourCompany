@@ -7,7 +7,7 @@ using TourCompany.Models.Configurations;
 
 namespace TourCompany.BL.Kafka
 {
-    public abstract class ConsumerHostedService<TKey, TValue> : IHostedService
+    public abstract class ConsumerHostedService<TKey, TValue> 
     {
         private readonly ILogger<ConsumerHostedService<TKey, TValue>> _logger;
         private readonly IOptions<KafkaConfig> _kafkaConfig;
@@ -36,7 +36,6 @@ namespace TourCompany.BL.Kafka
 
         public abstract void HandleMessage(TValue value);
 
-
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Start -> {nameof(ConsumerHostedService<TKey, TValue>)}");
@@ -59,6 +58,7 @@ namespace TourCompany.BL.Kafka
                     {
                         Console.WriteLine($"Error occured: {ex.Error.Reason}");
                     }
+                    await Task.Delay(5000);
                 }
             }, cancellationToken);
             return Task.CompletedTask;

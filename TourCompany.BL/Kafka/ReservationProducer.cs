@@ -1,8 +1,11 @@
 ﻿using Confluent.Kafka;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks.Dataflow;
 using TourCompany.BL.Kafka.Serializer;
+using TourCompany.DL.Interfaces;
 using TourCompany.Models.Configurations;
 using TourCompany.Models.Models;
 
@@ -20,8 +23,8 @@ namespace TourCompany.BL.Kafka
         {
             _logger = logger;
             _kafkaConfig = kafkaConfig;
-
             _topicName = typeof(Reservation).Name;
+
             var config = new ProducerConfig()
             {
                 BootstrapServers = _kafkaConfig.Value.BootstrapServers,
@@ -37,7 +40,6 @@ namespace TourCompany.BL.Kafka
         {
             var transformBlock = new TransformBlock<Reservation, Message<int, Reservation>>(x =>
             {
-
                 var msg = new Message<int, Reservation>()
                 {
                     Key = reservation.ReservationId,
@@ -50,7 +52,7 @@ namespace TourCompany.BL.Kafka
             var actionBlock = new ActionBlock<Message<int, Reservation>>(async msg =>
             {
                 var result = await _producer.ProduceAsync(_topicName, msg, cancellationToken);
-                _logger.LogInformation($"Delivered {msg.Key} -> {msg.Value}");
+                _logger.LogInformation($"Delivered Reservation Key {msg.Key} -> {msg.Value}");
             });
 
             transformBlock.LinkTo(actionBlock);

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using TourCompany.BL.Kafka;
 using TourCompany.DL.Interfaces;
 using TourCompany.Models.MediatR.Reservations;
 using TourCompany.Models.Models;
@@ -13,16 +14,18 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
     {
         private readonly ILogger<CreateReservationCommandHandler> _logger;
         private readonly IReservationRepository _reservationRepository;
-        public readonly IDestinationRepository _destinationRepository;
+        private readonly IDestinationRepository _destinationRepository;
         private readonly IMapper _mapper;
+        private readonly ReservationProducer _producer;
 
         public CreateReservationCommandHandler(ILogger<CreateReservationCommandHandler> logger, IReservationRepository reservationRepository,
-                                                IDestinationRepository destinationRepository, IMapper mapper)
+                                                IDestinationRepository destinationRepository, IMapper mapper, ReservationProducer producer)
         {
             _logger = logger;
             _reservationRepository = reservationRepository;
             _destinationRepository = destinationRepository;
             _mapper = mapper;
+            _producer = producer;
         }
 
         public async Task<ReservationResponse> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
@@ -48,14 +51,14 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 
                 var result = await _reservationRepository.CreateReservation(reservation);
 
+                await _producer.SendMessage(result, cancellationToken);
+
                 return new ReservationResponse()
                 {
                     HttpStatusCode = HttpStatusCode.OK,
                     Message = "You Successfully Created Your Reservation!",
                     Reservation = result
                 };
-
-                
             }
             catch (Exception ex)
             {
@@ -85,6 +88,10 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 
                 case "PROOCODE15%":
                     reservation.TotalPrice = defaultPrice - (defaultPrice * 0.15m);
+                    break;
+
+                case "":
+                    reservation.TotalPrice = defaultPrice;
                     break;
 
                 default:

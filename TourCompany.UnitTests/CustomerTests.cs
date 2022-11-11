@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using TourCompany.AutoMapper;
 using TourCompany.BL.CommandHandlers.CustomersHandlers;
+using TourCompany.BL.Kafka;
 using TourCompany.DL.Interfaces;
 using TourCompany.Models.MediatR.Customers;
 using TourCompany.Models.Models;
@@ -49,6 +50,8 @@ namespace TourCompany.UnitTests
         private readonly Mock<ILogger<UpdateCustomerCommandHandler>> _loggerUpdateAccountMock;
         private readonly Mock<ILogger<DeleteCustomerCommandHandler>> _loggerDeleteAccountMock;
 
+        private readonly Mock<IProducerService<int, Customer>> _producer;
+
         private readonly Mock<ICustomerRespository> _customerRepositoryMock;
 
         public CustomerTests()
@@ -65,6 +68,7 @@ namespace TourCompany.UnitTests
             _loggerUpdateAccountMock = new Mock<ILogger<UpdateCustomerCommandHandler>>();
             _loggerDeleteAccountMock = new Mock<ILogger<DeleteCustomerCommandHandler>>();
 
+            _producer = new Mock<IProducerService<int, Customer>>();
             _customerRepositoryMock = new Mock<ICustomerRespository>();
         }
 
@@ -155,7 +159,7 @@ namespace TourCompany.UnitTests
                                    })!.ReturnsAsync(() => _customers.FirstOrDefault(x => x.CustomerId == expectedId));
 
             var command = new CreateAccountCommand(customerRequest);
-            var handler = new CreateAccountCommandHandler(_loggerCreateAccountMock.Object, _customerRepositoryMock.Object, _mapper);
+            var handler = new CreateAccountCommandHandler(_loggerCreateAccountMock.Object, _customerRepositoryMock.Object, _mapper, _producer.Object);
 
             var result = await handler.Handle(command, new CancellationToken());
 
@@ -179,7 +183,7 @@ namespace TourCompany.UnitTests
                                    .ReturnsAsync(() => _customers.FirstOrDefault(x => x.Email == customerRequest.Email));
 
             var command = new CreateAccountCommand(customerRequest);
-            var handler = new CreateAccountCommandHandler(_loggerCreateAccountMock.Object, _customerRepositoryMock.Object, _mapper);
+            var handler = new CreateAccountCommandHandler(_loggerCreateAccountMock.Object, _customerRepositoryMock.Object, _mapper, _producer.Object);
 
             var result = await handler.Handle(command, new CancellationToken());
 

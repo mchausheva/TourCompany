@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Net;
+using TourCompany.BL.Kafka;
 using TourCompany.DL.Interfaces;
 using TourCompany.DL.Repositories;
+using TourCompany.Models.Configurations;
 using TourCompany.Models.MediatR.Reservations;
 using TourCompany.Models.Models;
 using TourCompany.Models.Responses;
@@ -15,14 +18,17 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
         private readonly ILogger<UpdateReservationCommandHandler> _logger;
         private readonly IMapper _mapper;
         private readonly IReservationRepository _reservationRepository;
-        public readonly IDestinationRepository _destinationRepository;
+        private readonly IDestinationRepository _destinationRepository;
+        private readonly ReservationProducer _producer;
 
-        public UpdateReservationCommandHandler(ILogger<UpdateReservationCommandHandler> logger, IMapper mapper, IReservationRepository reservationRepository, IDestinationRepository destinationRepository)
+        public UpdateReservationCommandHandler(ILogger<UpdateReservationCommandHandler> logger, IMapper mapper, 
+                    IReservationRepository reservationRepository, IDestinationRepository destinationRepository, ReservationProducer producer)
         {
             _logger = logger;
             _mapper = mapper;
             _reservationRepository = reservationRepository;
             _destinationRepository = destinationRepository;
+            _producer = producer;
         }
 
         public async Task<ReservationResponse> Handle(UpdateReservationCommand request, CancellationToken cancellationToken)
@@ -69,6 +75,8 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
                     };
                 }
 
+                await _producer.SendMessage(result, cancellationToken);
+
                 return new ReservationResponse()
                 {
                     HttpStatusCode = HttpStatusCode.OK,
@@ -104,6 +112,10 @@ namespace TourCompany.BL.CommandHandlers.ReservationsHandlers
 
                 case "PROOCODE15%":
                     reservation.TotalPrice = defaultPrice - (defaultPrice * 0.15m);
+                    break;
+
+                case "":
+                    reservation.TotalPrice = defaultPrice;
                     break;
 
                 default:

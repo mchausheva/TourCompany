@@ -44,7 +44,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHealthChecks()
                 .AddUrlGroup(new Uri("https://thetourcompany.co.uk/about/"), name: "About The Tour Company")
-                .AddCheck<KafkaHealthCheck>("Kafka Settings")
                 .AddCheck<SqlHealthCheck>("SQL Server")
                 .AddCheck<MongoHealthCheck>("MongoDB");
 

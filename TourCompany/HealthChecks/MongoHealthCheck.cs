@@ -21,7 +21,7 @@ namespace TourCompany.HealthChecks
             {
                 var dbClient = new MongoClient(_options.Value.ConnectionString);
                 var database = dbClient.GetDatabase(_options.Value.DatabaseName);
-                var collection = database.GetCollection<Reservation>(_options.Value.CollectionName);
+                var collection = database.GetCollection<Reservation>(_options.Value.ReservationCollectionName);
             }
             catch (Exception ex)
             {

@@ -22,7 +22,7 @@ namespace TourCompany.UnitTests
         public async Task Get_Destinations_Ok()
         {
             //set up
-            _mediator.Setup(x => x.Send(new Mock<GetAllDestinationCommand>(), new CancellationToken()));
+            _mediator.Setup(x => x.Send(new GetAllDestinationCommand(), new CancellationToken()));
 
             //inject
             var controller = new DestinationController(_loggerDestinationControllerMock.Object, _mediator.Object);

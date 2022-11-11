@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using TourCompany.BL.Kafka;
 using TourCompany.DL.Interfaces;
 using TourCompany.Models.MediatR.Customers;
 using TourCompany.Models.Models;
@@ -15,15 +16,20 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
         private readonly ICustomerRespository _customerRespository;
         private readonly IMapper _mapper;
 
-        public CreateAccountCommandHandler(ILogger<CreateAccountCommandHandler> logger, ICustomerRespository customerRespository, IMapper mapper)
+        private readonly IProducerService<int, Customer> _producer;
+
+        public CreateAccountCommandHandler(ILogger<CreateAccountCommandHandler> logger, ICustomerRespository customerRespository, 
+            IMapper mapper, IProducerService<int, Customer> producer)
         {
             _logger = logger;
             _customerRespository = customerRespository;
             _mapper = mapper;
+            _producer = producer;
         }
 
         public async Task<CustomerResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Command Handler -> CREATE Account");
             try
             {
                 var customerExist = _customerRespository.GetCustomerByEmail(request.customerRequest.Email).Result;
@@ -39,6 +45,8 @@ namespace TourCompany.BL.CommandHandlers.CustomersHandlers
 
                 var customer = _mapper.Map<Customer>(request.request);
                 var result = await _customerRespository.CreateAccount(customer);
+
+                await _producer.SendMessage(result, cancellationToken);
 
                 return new CustomerResponse
                 {
